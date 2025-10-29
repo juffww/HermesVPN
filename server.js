@@ -20,7 +20,8 @@ const vpnPackages = [
     memory: "3 MB",
     networkType: "Wifi or LAN",
     description: "Secure VPN client for Windows platform.",
-    file: "/packages/vpn-windows.zip",
+    // file: "/packages/vpn-windows.zip",
+    file: "/packages/note.txt",
   },
   {
     id: "mac",
@@ -31,7 +32,8 @@ const vpnPackages = [
     memory: "35 MB",
     networkType: "Wifi or LAN",
     description: "Secure VPN client for macOS platform.",
-    file: "/packages/vpn-macos.zip",
+    // file: "/packages/vpn-macos.zip",
+    file: "/packages/instruction.txt",
   },
 ];
 

@@ -1,0 +1,16 @@
+chmod 400 ~/path/to/my-key.pem
+
+scp -i ~/.ssh/my-key.pem ./localfile.txt ubuntu@3.123.45.67:/home/ubuntu/
+
+scp -i /home/bao/Documents/keypair/vpn-keypair.pem /home/bao/Documents/Server/PBL4---Build-a-VPN-system/VPN/vpn_server ubuntu@18.175.247.85:/home/ubuntu/
+
+scp -i /home/bao/Documents/keypair/vpn-keypair.pem -r /home/bao/Documents/Server/PBL4---Build-a-VPN-system/VPN ubuntu@18.175.247.85:/home/ubuntu/
+
+ssh -i /home/bao/Documents/keypair/vpn-keypair.pem ubuntu@44.202.210.62
+
+sudo tcpdump -i tun0 'icmp or tcp or udp' -nn -vv
+
+chmod 600 /home/bao/Documents/keypair/sgp-keypair.pem
+
+sudo ./vpn_server --cert certs/server.crt --key certs/server.key
+
