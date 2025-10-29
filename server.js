@@ -9,7 +9,13 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Dữ liệu gói VPN (có thể sau này lấy từ DB)
+// Cho phép truy cập file .zip trong thư mục packages/
+app.use("/packages", express.static(path.join(__dirname, "packages")));
+
+// Cho phép truy cập file frontend trong public/
+app.use(express.static(path.join(__dirname, "public")));
+
+// Dữ liệu các gói VPN
 const vpnPackages = [
   {
     id: "win",
@@ -18,7 +24,7 @@ const vpnPackages = [
     osVersion: "Windows 10 or later",
     size: "75 MB",
     memory: "3 MB",
-    networkType: "Wifi or LAN",
+    networkType: "Wi-Fi or LAN",
     description: "Secure VPN client for Windows platform.",
     file: "/packages/vpn-windows.zip",
   },
@@ -29,21 +35,18 @@ const vpnPackages = [
     osVersion: "macOS Sequoia 15.1 or later",
     size: "80 MB",
     memory: "35 MB",
-    networkType: "Wifi or LAN",
+    networkType: "Wi-Fi or LAN",
     description: "Secure VPN client for macOS platform.",
     file: "/packages/vpn-macos.zip",
   },
 ];
-
-// Public folder (ảnh, CSS, JS frontend)
-app.use(express.static(path.join(__dirname, "public")));
 
 // API trả danh sách gói
 app.get("/api/packages", (req, res) => {
   res.json(vpnPackages);
 });
 
-// Serve trang chính
+// Trang chính
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
