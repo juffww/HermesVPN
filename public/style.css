@@ -11,10 +11,17 @@ body {
     line-height: 1.6;
 }
 
+.logo img {
+  height: 100px;       
+  width: auto;       
+  object-fit: contain; 
+  display: block;
+}
+
 /* Navigation */
 nav {
     background: white;
-    padding: 20px 0;
+    padding: 5px 0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;

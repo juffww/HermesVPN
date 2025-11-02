@@ -9,10 +9,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Cho phép truy cập file .zip trong thư mục packages/
 app.use("/packages", express.static(path.join(__dirname, "packages")));
 
-// Cho phép truy cập file frontend trong public/
 app.use(express.static(path.join(__dirname, "public")));
 
 // Dữ liệu các gói VPN
