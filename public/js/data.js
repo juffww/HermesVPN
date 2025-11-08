@@ -1,5 +1,3 @@
-// data.js - Centralized data configuration
-
 export const siteConfig = {
   name: "HermesVPN",
   description: "Free, Fast & Secure VPN Service",

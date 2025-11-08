@@ -29,7 +29,7 @@ export async function fetchPackages() {
     return data;
   } catch (error) {
     console.error('Error loading packages:', error);
-    throw error; // Re-throw để component xử lý
+    throw error; 
   }
 }
 
