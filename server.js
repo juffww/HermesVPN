@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -9,8 +8,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Serve static files từ thư mục packages
 app.use("/packages", express.static(path.join(__dirname, "packages")));
 
+// Serve static files từ thư mục public
 app.use(express.static(path.join(__dirname, "public")));
 
 // Dữ liệu các gói VPN
@@ -39,14 +40,27 @@ const vpnPackages = [
   },
 ];
 
-// API trả danh sách gói
+// API endpoint trả về danh sách gói VPN
 app.get("/api/packages", (req, res) => {
   res.json(vpnPackages);
 });
 
-// Trang chính
+// Route cho trang chủ
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// Route cho trang download
+app.get("/download.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "download.html"));
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).send("Page not found");
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

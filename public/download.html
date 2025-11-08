@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download HermesVPN - For all platforms</title>
+  <meta name="description" content="Download HermesVPN for Windows and macOS. Fast, secure, and easy to install. Completely free.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import React, { useState, useEffect } from 'react';
+    import { createRoot } from 'react-dom/client';
+    import { Shield, Download, CheckCircle, AlertCircle, Monitor, Apple, Cpu, Package, ArrowLeft } from 'lucide-react';
+
+    function DownloadPage() {
+      const [selectedPlatform, setSelectedPlatform] = useState('windows');
+      const [packages, setPackages] = useState([]);
+
+      useEffect(() => {
+        fetch("/api/packages")
+          .then(res => res.json())
+          .then(data => {
+            setPackages(data);
+            console.log('Packages loaded:', data);
+          })
+          .catch(err => {
+            console.error('Error loading packages:', err);
+            setPackages([
+              {
+                id: "win",
+                name: "VPN for Windows",
+                version: "1.0.0",
+                osVersion: "Windows or later",
+                size: "75 MB",
+                memory: "3 MB",
+                networkType: "Wi-Fi or LAN",
+                description: "secure VPN application for Windows platform.",
+                file: "/packages/vpn-windows.zip",
+              },
+              {
+                id: "mac",
+                name: "VPN for macOS",
+                version: "1.0.0",
+                osVersion: "macOS Sequoia 15.1 or later",
+                size: "80 MB",
+                memory: "35 MB",
+                networkType: "Wi-Fi or LAN",
+                description: "secure VPN application for macOS platform.",
+                file: "/packages/vpn-macos.zip",
+              }
+            ]);
+          });
+      }, []);
+
+      const platforms = {
+        windows: {
+          id: 'windows',
+          name: 'Windows',
+          icon: React.createElement(Monitor, { className: "w-16 h-16" }),
+          emoji: '🪟',
+          features: [
+            'One-click connection',
+            'Automatic optimal server selection',
+            'Automatic kill switch',
+            'DNS leak protection',
+            'Split tunneling',
+            'System tray integration',
+            'Auto-start with Windows',
+            'Real-time connection statistics'
+          ],
+          installation: [
+            'Download the installer using the button below',
+            'Run the .zip file and extract it',
+            'Run the installer with Administrator privileges',
+            'Follow the installation instructions',
+            'Launch HermesVPN and enter your login credentials',
+            'Click Connect to establish a secure VPN connection'
+          ],
+          faqs: [
+            {
+              q: 'Do I need administrator rights to install?',
+              a: 'Yes, administrator privileges are required to install VPN software on Windows because it needs to configure network adapters and system settings.'
+            },
+            {
+              q: 'Is it compatible with Windows 11?',
+              a: 'Yes, HermesVPN is fully compatible with Windows 11 and optimized for the latest Windows features.'
+            },
+            {
+              q: 'Why does Windows Defender show a warning for the installer file?',
+              a: 'New software versions can sometimes trigger Windows Defender alerts. HermesVPN is completely safe, and you can proceed with the installation confidently.'
+            }
+          ]
+        },
+        macos: {
+          id: 'macos',
+          name: 'macOS',
+          icon: React.createElement(Apple, { className: "w-16 h-16" }),
+          emoji: '🍎',
+          features: [
+            'Quick access from the menu bar',
+            'Native macOS design',
+            'Optimized for Apple Silicon',
+            'Automatic network protection',
+            'Auto-reconnect',
+            'Low power consumption',
+            'Keychain integration',
+            'Dark mode support',
+            'Touch Bar support',
+            'Notification Center integration'
+          ],
+          installation: [
+            'Download the .zip file using the button below',
+            'Extract the downloaded .zip file',
+            'Open the .dmg file or run the installer',
+            'Drag the HermesVPN app into the Applications folder',
+            'Open Applications and launch HermesVPN',
+            'Grant VPN configuration permission when prompted'
+          ],
+          faqs: [
+            {
+              q: 'Does it work on Apple Silicon (M1/M2/M3)?',
+              a: 'Yes! HermesVPN is a Universal Binary optimized for both Intel and Apple Silicon processors, ensuring native performance across all Macs.'
+            },
+            {
+              q: 'Is it compatible with macOS Sonoma?',
+              a: 'Yes, HermesVPN supports all versions from macOS 11 Big Sur to the latest macOS Sonoma and future versions.'
+            },
+            {
+              q: 'Why does macOS ask for VPN permissions?',
+              a: 'macOS explicitly requires permission to add a VPN configuration for security reasons. This is a standard system prompt that all VPN apps must request.'
+            }
+          ]
+        }
+      };
+
+      const currentPlatform = platforms[selectedPlatform];
+      const currentPackage = packages.find(pkg => pkg.id === (selectedPlatform === 'windows' ? 'win' : 'mac')) || packages[0];
+
+      const handleDownload = (fileUrl) => {
+        console.log('Downloading:', fileUrl);
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = fileUrl.split('/').pop();
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      return React.createElement('div', { className: "min-h-screen bg-gradient-to-b from-slate-50 to-white" },
+        React.createElement('header', { className: "sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm" },
+          React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
+            React.createElement('div', { className: "flex justify-between items-center h-20" },
+              React.createElement('a', { href: "/index.html", className: "flex items-center gap-3" },
+                // React.createElement('div', { className: "w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-lg" },
+                //   React.createElement(Shield, { className: "w-7 h-7 text-white" })
+                // ),
+                React.createElement('img', {src: './logo.png',alt: 'Logo',className: 'w-20 h-20 object-contain'},
+                ),
+                React.createElement('span', { className: "text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent" },
+                  'HermesVPN'
+                )
+              ),
+              React.createElement('a', { href: "/index.html", className: "flex items-center gap-2 text-slate-600 hover:text-blue-600 font-medium transition" },
+                React.createElement(ArrowLeft, { className: "w-5 h-5" }),
+                'Return to Home'
+              )
+            )
+          )
+        ),
+
+        React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" },
+          React.createElement('div', { className: "text-center mb-12" },
+            React.createElement('h1', { className: "text-4xl md:text-5xl font-bold text-slate-900 mb-4" },
+              'Download HermesVPN'
+            ),
+            React.createElement('p', { className: "text-xl text-slate-600 max-w-2xl mx-auto" },
+              'Choose your platform and start protecting your online privacy today'
+            )
+          ),
+
+          React.createElement('div', { className: "flex justify-center gap-4 mb-12" },
+            React.createElement('button', {
+              onClick: () => setSelectedPlatform('windows'),
+              className: `flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+                selectedPlatform === 'windows'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300'
+              }`
+            },
+              React.createElement(Monitor, { className: "w-6 h-6" }),
+              'Windows'
+            ),
+            React.createElement('button', {
+              onClick: () => setSelectedPlatform('macos'),
+              className: `flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg transition-all ${
+                selectedPlatform === 'macos'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-blue-300'
+              }`
+            },
+              React.createElement(Apple, { className: "w-6 h-6" }),
+              'macOS'
+            )
+          ),
+
+          currentPackage && React.createElement('div', { className: "mb-12" },
+            React.createElement('div', { className: "bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 md:p-12 mb-8 border-2 border-blue-200" },
+              React.createElement('div', { className: "grid md:grid-cols-2 gap-8 items-center" },
+                React.createElement('div', null,
+                  React.createElement('div', { className: "flex items-center gap-4 mb-6" },
+                    React.createElement('div', { className: "text-6xl" }, currentPlatform.emoji),
+                    React.createElement('div', null,
+                      React.createElement('h2', { className: "text-3xl font-bold text-slate-900" }, currentPackage.name),
+                      React.createElement('span', { className: "text-slate-600" }, `Phiên bản ${currentPackage.version}`)
+                    )
+                  ),
+                  React.createElement('p', { className: "text-slate-700 text-lg mb-6" }, currentPackage.description),
+                  React.createElement('div', { className: "space-y-3 mb-6" },
+                    [
+                      ['Operating System:', currentPackage.osVersion],
+                      ['File Size:', currentPackage.size],
+                      ['Memory Requirement:', currentPackage.memory],
+                      ['Network Type:', currentPackage.networkType]
+                    ].map(([label, value], i) =>
+                      React.createElement('div', { key: i, className: "flex justify-between" },
+                        React.createElement('span', { className: "text-slate-600" }, label),
+                        React.createElement('span', { className: "font-medium text-slate-900" }, value)
+                      )
+                    )
+                  )
+                ),
+                
+                React.createElement('div', { className: "flex justify-center" },
+                  React.createElement('svg', { viewBox: "0 0 300 300", className: "w-64 h-64" },
+                    React.createElement('circle', { cx: "150", cy: "150", r: "140", fill: "url(#downloadGradient)", opacity: "0.2" }),
+                    React.createElement('circle', { cx: "150", cy: "150", r: "110", fill: "url(#downloadGradient)", opacity: "0.3" }),
+                    React.createElement('circle', { cx: "150", cy: "150", r: "80", fill: "url(#downloadGradient)" }),
+                    React.createElement('path', { d: "M150 90 L150 170", stroke: "white", strokeWidth: "12", strokeLinecap: "round" }),
+                    React.createElement('path', { d: "M150 170 L120 140 M150 170 L180 140", stroke: "white", strokeWidth: "12", strokeLinecap: "round", fill: "none" }),
+                    React.createElement('rect', { x: "100", y: "180", width: "100", height: "15", rx: "7", fill: "white" }),
+                    
+                    [130, 150, 170].map((cx, i) =>
+                      React.createElement('circle', { key: i, cx, cy: "210", r: "4", fill: "white" },
+                        React.createElement('animate', { attributeName: "opacity", values: "0.3;1;0.3", dur: "1.5s", begin: `${i * 0.3}s`, repeatCount: "indefinite" })
+                      )
+                    ),
+                    
+                    React.createElement('defs', null,
+                      React.createElement('linearGradient', { id: "downloadGradient", x1: "0%", y1: "0%", x2: "100%", y2: "100%" },
+                        React.createElement('stop', { offset: "0%", stopColor: "#3b82f6" }),
+                        React.createElement('stop', { offset: "100%", stopColor: "#8b5cf6" })
+                      )
+                    )
+                  )
+                )
+              ),
+              
+              React.createElement('div', { className: "flex gap-4 mt-8" },
+                React.createElement('button', {
+                  onClick: () => handleDownload(currentPackage.file),
+                  className: "flex-1 bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2"
+                },
+                  React.createElement(Download, { className: "w-5 h-5" }),
+                  `Download for ${currentPlatform.name}`
+                ),
+                React.createElement('button', { className: "bg-white hover:bg-slate-50 text-slate-900 px-8 py-4 rounded-xl font-bold text-lg transition-all border-2 border-slate-200 flex items-center justify-center gap-2" },
+                  React.createElement(Package, { className: "w-5 h-5" }),
+                  'Details'
+                )
+              )
+            ),
+
+            React.createElement('div', { className: "grid md:grid-cols-3 gap-8 mb-12" },
+              React.createElement('div', { className: "bg-white rounded-2xl p-8 shadow-lg border border-slate-200" },
+                React.createElement('div', { className: "flex items-center gap-3 mb-6" },
+                  React.createElement('div', { className: "w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center" },
+                    React.createElement(Cpu, { className: "w-6 h-6" })
+                  ),
+                  React.createElement('h3', { className: "text-xl font-bold text-slate-900" }, 'System requirements')
+                ),
+                React.createElement('div', { className: "space-y-3 text-sm" },
+                  [
+                    ['OS:', currentPackage.osVersion],
+                    ['File Size:', currentPackage.size],
+                    ['Memory Requirement:', currentPackage.memory],
+                    ['Network Type:', currentPackage.networkType]
+                  ].map(([label, value], i) =>
+                    React.createElement('div', { key: i, className: "flex justify-between" },
+                      React.createElement('span', { className: "text-slate-600" }, label),
+                      React.createElement('span', { className: "font-medium text-slate-900" }, value)
+                    )
+                  )
+                )
+              ),
+
+              React.createElement('div', { className: "bg-white rounded-2xl p-8 shadow-lg border border-slate-200" },
+                React.createElement('div', { className: "flex items-center gap-3 mb-6" },
+                  React.createElement('div', { className: "w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center" },
+                    React.createElement(CheckCircle, { className: "w-6 h-6" })
+                  ),
+                  React.createElement('h3', { className: "text-xl font-bold text-slate-900" }, 'Main features')
+                ),
+                React.createElement('ul', { className: "space-y-3" },
+                  currentPlatform.features.slice(0, 6).map((feature, idx) =>
+                    React.createElement('li', { key: idx, className: "flex items-start gap-3 text-slate-700 text-sm" },
+                      React.createElement('div', { className: "w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" },
+                        React.createElement(CheckCircle, { className: "w-3 h-3" })
+                      ),
+                      React.createElement('span', null, feature)
+                    )
+                  )
+                )
+              ),
+
+              React.createElement('div', { className: "bg-white rounded-2xl p-8 shadow-lg border border-slate-200" },
+                React.createElement('div', { className: "flex items-center gap-3 mb-6" },
+                  React.createElement('div', { className: "w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center" },
+                    React.createElement(Package, { className: "w-6 h-6" })
+                  ),
+                  React.createElement('h3', { className: "text-xl font-bold text-slate-900" }, 'Package Information')
+                ),
+                React.createElement('div', { className: "space-y-3 text-sm" },
+                  [
+                    ['Version:', currentPackage.version],
+                    ['File Size:', currentPackage.size],
+                    ['Format:', '.zip'],
+                    ['License:', 'Free']
+                  ].map(([label, value], i) =>
+                    React.createElement('div', { key: i, className: "flex justify-between" },
+                      React.createElement('span', { className: "text-slate-600" }, label),
+                      React.createElement('span', { className: "font-medium text-slate-900" }, value)
+                    )
+                  )
+                )
+              )
+            ),
+
+            React.createElement('div', { className: "bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-8 md:p-12 mb-12 border border-slate-200" },
+              React.createElement('h2', { className: "text-3xl font-bold text-slate-900 mb-8 text-center" },
+                'Installation Guide'
+              ),
+              React.createElement('div', { className: "grid md:grid-cols-3 gap-6" },
+                currentPlatform.installation.map((step, idx) =>
+                  React.createElement('div', { key: idx, className: "bg-white rounded-2xl p-6 shadow-lg" },
+                    React.createElement('div', { className: "w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl flex items-center justify-center font-bold text-xl mb-4 shadow-lg" },
+                      idx + 1
+                    ),
+                    React.createElement('p', { className: "text-slate-700 leading-relaxed" }, step)
+                  )
+                )
+              ),
+              React.createElement('div', { className: "mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-xl" },
+                React.createElement('div', { className: "flex gap-3" },
+                  React.createElement(AlertCircle, { className: "w-6 h-6 text-yellow-600 flex-shrink-0" }),
+                  React.createElement('div', null,
+                    React.createElement('p', { className: "font-semibold text-yellow-900 mb-2" }, 'Lưu ý quan trọng'),
+                    React.createElement('p', { className: "text-yellow-800 text-sm leading-relaxed" },
+                      currentPlatform.name === 'Windows' 
+                      ? 'Windows Defender may display a warning for new software. HermesVPN is completely safe and verified. You may need to allow the app through your firewall.' 
+                      : 'macOS will request permission to add a VPN configuration. This is required for the VPN to function. You may also need to grant network extension permissions.'
+                    )
+                  )
+                )
+              )
+            ),
+
+            React.createElement('div', { className: "bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-slate-200" },
+              React.createElement('h2', { className: "text-3xl font-bold text-slate-900 mb-8 text-center" },
+                'Frequently Asked Questions'
+              ),
+              React.createElement('div', { className: "space-y-6" },
+                currentPlatform.faqs.map((faq, idx) =>
+                  React.createElement('div', { key: idx, className: "border-b border-slate-200 pb-6 last:border-0" },
+                    React.createElement('h3', { className: "text-lg font-bold text-slate-900 mb-3" }, faq.q),
+                    React.createElement('p', { className: "text-slate-600 leading-relaxed" }, faq.a)
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        React.createElement('footer', { className: "bg-slate-900 text-slate-300 py-12 mt-20" },
+          React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center" },
+            React.createElement('div', { className: "flex items-center justify-center gap-3 mb-4" },
+              React.createElement('div', { className: "w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center" },
+                React.createElement(Shield, { className: "w-6 h-6 text-white" })
+              ),
+              React.createElement('span', { className: "text-xl font-bold text-white" }, 'HermesVPN')
+            ),
+            React.createElement('p', { className: "text-slate-400 mb-4" }, '© 2025 HermesVPN - Free Educational Project'),
+            React.createElement('p', { className: "text-sm text-slate-500" },
+              React.createElement('a', { href: "#", className: "hover:text-white transition" }, 'Privacy Policy'),
+              ' | ',
+              React.createElement('a', { href: "#", className: "hover:text-white transition" }, 'Terms of Service'),
+              ' | ',
+              React.createElement('a', { href: "#", className: "hover:text-white transition" }, 'Contact')
+            )
+          )
+        )
+      );
+    }
+
+    const root = createRoot(document.getElementById('root'));
+    root.render(React.createElement(DownloadPage));
+  </script>
+</body>
+</html>
